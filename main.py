@@ -61,7 +61,7 @@ while True:
     hours, remainder = divmod(estimated_time_seconds, 3600)
     minutes, seconds = divmod(remainder, 60)
     if required_streak > def_streak:
-        if required_streak > 2000:
+        if required_streak - def_streak > 2000:
             consent_huge_streak = input(f'Estimated total time: {int(hours)} hours, {int(minutes)} minutes, {int(seconds)} seconds, do you give consent? (y/n)')
             if consent_huge_streak == "y" or consent_huge_streak == "Y":
                 break
