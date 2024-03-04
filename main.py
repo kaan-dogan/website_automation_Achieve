@@ -3,7 +3,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from pyfiglet import Figlet
 from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 import time
@@ -17,24 +16,17 @@ chrome_options.add_argument('--disable-extensions')
 browser = webdriver.Chrome(options=chrome_options)
 browser.get('https://achieve.hashtag-learning.co.uk/accounts/login/')
 
-#Welcome Prompt [problem when changing to exe]
-# def ascii_art(text, font, width=200):
-#     fig = Figlet(font=font, width=width)
-#     ascii_art = fig.renderText(text)
-#     print(ascii_art)
-
-# ascii_art('Made by K.', font="standard")
-
 def question_loop():
     try:
         #click on asses_topic
-        asses_topic = browser.find_element_by_xpath('/html/body/main/div/div[2]/main/div/div[2]/div/div[2]/div[1]/div[2]/a').click()
-
+        browser.find_element(By.XPATH, '/html/body/main/div/div[1]/nav/div/ul[1]/li[4]/a').click()
+        #click on asses topic
+        browser.find_element(By.XPATH, '/html/body/main/div/div[2]/main/div/div[2]/div/div[2]/div[1]/div[2]/a').click()
         #click on environmental_impact [CHANGE IF NEEDED]
-        target_topic = browser.find_element_by_xpath('/html/body/main/div/div[2]/main/div/div[3]/div/div[2]/div[8]/div/a').click()
+        browser.find_element(By.XPATH, '/html/body/main/div/div[2]/main/div/div[3]/div/div[2]/div[8]/div/a').click()
         WebDriverWait(browser, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/main/div/div[2]/main/div/form/div/div/div[2]/div/div[1]/div/button'))).click() #wait for button to be clickable
         #question page
-        question_parent = browser.find_element_by_xpath('/html/body/main/div/div[2]/main/div/div[2]/div[1]/div/div')#getting question
+        question_parent = browser.find_element(By.XPATH, '/html/body/main/div/div[2]/main/div/div[2]/div[1]/div/div')#getting question
         question = question_parent.text
         
         #checking which question it is [CHANGE FOR DIFFERENT TOPICS (ADD OR REMOVE)]
@@ -54,13 +46,13 @@ def question_loop():
 
         #getting choices
         choices = []
-        parent_choices = [browser.find_element_by_xpath('/html/body/main/div/div[2]/main/div/div[2]/div[2]/div[1]/div[1]/div[1]'), browser.find_element_by_xpath('/html/body/main/div/div[2]/main/div/div[2]/div[2]/div[1]/div[2]/div[1]'), browser.find_element_by_xpath('/html/body/main/div/div[2]/main/div/div[2]/div[2]/div[2]/div[1]/div[1]'), browser.find_element_by_xpath('/html/body/main/div/div[2]/main/div/div[2]/div[2]/div[2]/div[2]/div[1]')]
+        parent_choices = [browser.find_element(By.XPATH, '/html/body/main/div/div[2]/main/div/div[2]/div[2]/div[1]/div[1]/div[1]'), browser.find_element(By.XPATH, '/html/body/main/div/div[2]/main/div/div[2]/div[2]/div[1]/div[2]/div[1]'), browser.find_element(By.XPATH, '/html/body/main/div/div[2]/main/div/div[2]/div[2]/div[2]/div[1]/div[1]'), browser.find_element(By.XPATH, '/html/body/main/div/div[2]/main/div/div[2]/div[2]/div[2]/div[2]/div[1]')]
         for i in range(len(parent_choices)):
             choices.append(parent_choices[i].text)
         #getting buttons
         button = []
         for i in range(4):
-            button.append(browser.find_element_by_xpath(f'//*[@id="button_{i+1}"]'))
+            button.append(browser.find_element(By.XPATH, f'//*[@id="button_{i+1}"]'))
         #clicks the right choice
         for choice in choices:
             if choice in correct:
@@ -71,8 +63,8 @@ def question_loop():
         
 def get_streak():
         try:
-            asses_button = browser.find_element_by_xpath('//*[@id="navbarSupportedContent"]/ul[1]/li[4]/a').click()
-            def_streak_parent = browser.find_element_by_xpath('/html/body/main/div/div[2]/main/div/div[3]/div/div[2]/div[2]/div[1]')
+            browser.find_element(By.XPATH, '//*[@id="navbarSupportedContent"]/ul[1]/li[4]/a').click()
+            def_streak_parent = browser.find_element(By.XPATH, '/html/body/main/div/div[2]/main/div/div[3]/div/div[2]/div[2]/div[1]')
             streak_text = def_streak_parent.text
             return int(streak_text.split(':')[-1].strip())
         except (TimeoutException, NoSuchElementException) as e:
@@ -80,13 +72,10 @@ def get_streak():
             return 0
 
 if __name__ == "__main__":
-
-    # log_file_path = 'script_log.txt'
-    # logging.basicConfig(filename=log_file_path, level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
     
     while True:
-        username_element = browser.find_element_by_xpath('//*[@id="id_login"]')
-        password_element = browser.find_element_by_xpath('//*[@id="id_password"]')
+        username_element = browser.find_element(By.XPATH, '//*[@id="id_login"]')
+        password_element = browser.find_element(By.XPATH, '//*[@id="id_password"]')
         
         username_input = input('E-mail: (only the numbers): ')+'@ea.edin.sch.uk'
         password_input = input('Password: ')
@@ -97,7 +86,7 @@ if __name__ == "__main__":
         password_element.clear()
         password_element.send_keys(password_input)
         
-        sign_in_button = browser.find_element_by_xpath('/html/body/main/div/div[2]/div[2]/div/div/div[2]/form/button').click()
+        sign_in_button = browser.find_element(By.XPATH, '/html/body/main/div/div[2]/div[2]/div/div/div[2]/form/button').click()
         
         current_url = browser.current_url
         if current_url != 'https://achieve.hashtag-learning.co.uk/accounts/login/':
@@ -106,9 +95,8 @@ if __name__ == "__main__":
             print('Login information given incorrectly, please try again.')
             continue
 
-    #main page [CHANGE IF NEEDED]
-    course = browser.find_element_by_xpath('/html/body/main/div/div[2]/main/div/div[1]/div/div[2]/div[1]/div[1]/form/button').click()
-    #click on nav bar
+    #main page
+    course = browser.find_element(By.XPATH, '/html/body/main/div/div[2]/main/div/div[1]/div/div[2]/div[1]/div[1]/form/button').click()
 
     #getting streak
     def_streak = get_streak()
@@ -120,7 +108,7 @@ if __name__ == "__main__":
         hours, remainder = divmod(estimated_time_seconds, 3600)
         minutes, seconds = divmod(remainder, 60)
         if required_streak > def_streak:
-            if required_streak - def_streak > 2000:
+            if repeat_no > 2000:
                 consent_huge_streak = input(f'Estimated total time: {int(hours)} hours, {int(minutes)} minutes, {int(seconds)} seconds, do you give consent? (y/n)')
                 if consent_huge_streak == "y" or consent_huge_streak == "Y":
                     log_streak = 100
